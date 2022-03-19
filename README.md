@@ -108,3 +108,23 @@ err := engine.Where("Name='袁大鹰'and Age=20").Update(&Student{
 engine.ID(1).Delete(new(Student))
 ```
 
+## O(1)复杂度下 缓存的全量删除
+
+* 举例：查询和删除时，使用的`Where()`语句不同导致缓存中的`key`不一致
+
+```go
+engine.Insert(nil, &Student{Id:1, Name:"小小", Age:20})
+// 此时缓存中 key: Age=20  
+engine.Where("Age=20").Get(new(student))
+// 此时只有Name信息，需要删除上面缓存中的数据，要求时间复杂度O(1)
+engine.Where("Name='小小'").Delete(new(student))
+```
+
+* 解决策略：维护`Map[Primarykey] Cachekey`映射表，详见`images/redis-xorm.jpg` UML图
+
+
+
+### 高并发
+
+* 使用SingleFlight策略，避免过多数据同时涌入Redis和Mysql
+* 参考极客兔兔的[实现](
