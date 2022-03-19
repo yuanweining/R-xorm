@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 	"sync"
+	"time"
 )
 
 var engine = DefaultEngine
@@ -71,16 +72,19 @@ func TestFind(t *testing.T){
 		Name: "ywn",
 		Age: 20,
 	})
+	start := time.Now()
 	//可以测试一下，在十万条和一百万条情况下，调用.LowerFind()的延时，对比使用singleflight与否的区别
 	for i:=0;i<100000;i++{  
 		wg.Add(1)
 		go func(){
 			students := make([]Student, 0)
+			//engine.Database.Engine.Where("Age=20").Find(&students)
 			_, _ = engine.Where("Age=20").Find(&students)
 			wg.Done()
 		}()
 	}
 	wg.Wait()
+	fmt.Println("消耗时间为：", time.Since(start))
 	students := make([]Student, 0)
 	isCache, err := engine.Where("Age=20").Find(&students)
 	if isCache == false || err !=nil{
