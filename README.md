@@ -1,10 +1,8 @@
 # R-xorm
 
-R-xorm是一个集成了Redis和Xorm的go语言库。
+R-xorm是一个集成了Redis和Xorm的go语言库，用户通过编写xorm风格的代码即可便利的使用Redis缓存，而无需显式调用Redis。
 
-用户通过编写xorm风格的代码即可便利的使用Redis缓存，而无需显式调用Redis。
-
-### 特性
+## 特性
 
 * xorm语法风格
 * 用户无需感知缓存层，框架根据用户原始SQL语句或ORM操作自动分配缓存
@@ -15,12 +13,12 @@ R-xorm是一个集成了Redis和Xorm的go语言库。
   * redis+xorm 独立调用：支持每秒五万次查询请求
   * R-xorm：支持每秒五十万次查询请求
 
-### 驱动支持
+## 驱动支持
 
 * Xorm：github.com/go-xorm/xorm
 * Redis：github.com/go-redis/redis
 
-### 安装
+## 安装
 
 ```shell
 go get github.com/yuanweining/R-xorm
@@ -28,7 +26,7 @@ go get github.com/yuanweining/R-xorm
 
 
 
-### 快速开始
+## 快速开始
 
 * 先创建引擎，使用默认引擎或调用 `Rxorm.NewEngine()`
 
