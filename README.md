@@ -114,8 +114,10 @@ engine.ID(1).Delete(new(Student))
 
 ```go
 engine.Insert(nil, &Student{Id:1, Name:"小小", Age:20})
+
 // 此时缓存中 key: Age=20  
 engine.Where("Age=20").Get(new(student))
+
 // 此时只有Name信息，需要删除上面缓存中的数据，要求时间复杂度O(1)
 engine.Where("Name='小小'").Delete(new(student))
 ```
