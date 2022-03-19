@@ -42,7 +42,7 @@ R-xorm是一个集成了Redis和Xorm的高性能存储框架。
 go get github.com/yuanweining/R-xorm
 ```
 
-# 快速开始
+## 快速开始
 
 * 先创建引擎，使用默认引擎或调用 `Rxorm.NewEngine()`
 
