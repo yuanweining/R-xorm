@@ -1,6 +1,7 @@
 # R-xorm
 
 R-xorm是一个集成了Redis和Xorm的go语言库。
+
 用户通过编写xorm风格的代码即可便利的使用Redis缓存，而无需显式调用Redis。
 
 ### 特性
