@@ -124,7 +124,7 @@ engine.Where("Name='小小'").Delete(new(student))
 
 
 
-### 高并发
+## 高并发
 
 * 使用SingleFlight策略，避免过多数据同时涌入Redis和Mysql
 * 参考极客兔兔的[实现](https://geektutu.com/post/geecache-day6.html)
