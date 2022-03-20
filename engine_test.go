@@ -9,6 +9,7 @@ import (
 
 var engine = DefaultEngine
 
+
 func TestInit(t *testing.T){
 	if engine.Cache == nil || engine.Database == nil{
 		t.Errorf("init wrong!")
