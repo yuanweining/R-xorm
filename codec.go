@@ -14,6 +14,8 @@ type Header struct{
 type Codec interface{
 	Marshal(v interface{}) ([]byte, error)
 	Unmarshal(data []byte, v interface{}) error
+	Read(value interface{})error
+	Write(head Header, value interface{})error
 }
 
 type JsonCodec struct{
