@@ -5,6 +5,9 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/go-redis/redis"
+	"github.com/go-xorm/xorm"
 )
 
 type PrimaryMapQuerys map[string][]string
@@ -15,7 +18,6 @@ type Engine struct{
 	mu sync.Mutex // 保护下面map
 	TableMapKV map[string]PrimaryMapQuerys
 	loader SingleFlight
-	Coder Code
 }
 
 /* 
@@ -25,12 +27,26 @@ type Engine struct{
 
 */
 
-func NewEngine(Addr string, Password string, DB int, expiration time.Duration, driverName string, dataSourceName string, coder Code)*Engine{
+/*
+	RedisClient: Client of Redis
+	XormEngine: Engine of xorm
+	expiration: expiration time of redis, default 0
+	coder: Codec, default nil
+*/ 
+func NewEngine(RedisClient *redis.Client, XormEngine *xorm.Engine, expiration time.Duration, coder Codec)*Engine{
+	if coder == nil{
+		coder = DefaultCodec
+	}
 	return &Engine{
-		Database: NewXorm(driverName, dataSourceName),
-		Cache: NewRedis(Addr, Password, DB, expiration, coder),
+		Database: &Xorm{
+			Engine: XormEngine,
+		},
+		Cache: &Redis{
+			Engine: RedisClient,
+			expiration: expiration,
+			Coder: coder,
+		},
 		TableMapKV: make(map[string]PrimaryMapQuerys),
-		Coder: coder,
 	}
 }
 
@@ -38,7 +54,6 @@ var DefaultEngine *Engine = &Engine{
 	Database: DefaultXorm,
 	Cache: DefaultRedis,
 	TableMapKV: make(map[string]PrimaryMapQuerys),
-	Coder: new(JsonCode),
 }
 
 func (e *Engine) CreateTables(beans ...interface{})error{

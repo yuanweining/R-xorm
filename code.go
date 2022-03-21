@@ -4,17 +4,20 @@ import(
 	"encoding/json"
 )
 
-type Code interface{
+type Codec interface{
 	Marshal(v interface{}) ([]byte, error)
 	Unmarshal(data []byte, v interface{}) error
 }
 
-type JsonCode struct{} 
+type JsonCodec struct{} 
 
-func (j *JsonCode)Marshal(v interface{}) ([]byte, error){
+func (j *JsonCodec)Marshal(v interface{}) ([]byte, error){
 	return json.Marshal(v)
 }
 
-func (j *JsonCode)Unmarshal(data []byte, v interface{}) error{
+func (j *JsonCodec)Unmarshal(data []byte, v interface{}) error{
 	return json.Unmarshal(data, v)
 }
+
+var DefaultCodec = new(JsonCodec)
+

@@ -20,4 +20,9 @@ func NewXorm(driverName string, dataSourceName string) (x *Xorm){
 	return
 }
 
-var DefaultXorm *Xorm = NewXorm("mysql", "root:y13692509608@tcp(127.0.0.1:3306)/DefaultDatabase")
+var DefaultXorm *Xorm = NewXorm(DefaultXormDriverName, DefaultXormDataSourceName)
+
+var (
+	DefaultXormDriverName = "mysql"
+	DefaultXormDataSourceName = "root:y13692509608@tcp(127.0.0.1:3306)/DefaultDatabase"
+)

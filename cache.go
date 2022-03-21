@@ -10,19 +10,25 @@ import (
 type Redis struct{
 	Engine *redis.Client
 	expiration time.Duration // 过期时间
-	Coder Code
+	Coder Codec
 }
 
-func NewRedis(Addr string, Password string, DB int, expiration time.Duration, coder Code) *Redis{
-	return &Redis{
-		Engine: redis.NewClient(&redis.Options{
-			Addr:     Addr, 
-			Password: Password,              
-			DB:       DB,                
-		}),
-		Coder: coder,
-	}
+var DefaultRedis = &Redis{
+	Engine: redis.NewClient(&redis.Options{
+		Addr:     DefaultRedisAddr, 
+		Password: DefaultRedisPassword,              
+		DB:       DefaultRedisDB,                
+	}),
+	expiration: DefaultRedisExpiration,
+	Coder: DefaultCodec,
 }
+
+var (
+	DefaultRedisAddr = "localhost:6379"
+	DefaultRedisPassword = ""
+	DefaultRedisDB = 0
+	DefaultRedisExpiration = time.Duration(0)
+)
 
 func GetPattern(KeyMapValue map[string]*Value) (pattern string){
 	kSlice := []string{}
@@ -59,4 +65,3 @@ func (r *Redis) Get(table string, KeyMapValue map[string]*Value, value interface
 	return r.Coder.Unmarshal(valueBytes, value)
 }
 
-var DefaultRedis *Redis = NewRedis("localhost:6379", "", 0, 0, new(JsonCode))
