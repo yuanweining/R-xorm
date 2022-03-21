@@ -1,16 +1,17 @@
 package Rxorm
 
 import (
+	"encoding/json"
 	"fmt"
-	"time"
-	"github.com/go-redis/redis"
 	"sort"
+	"time"
+
+	"github.com/go-redis/redis"
 )
 
 type Redis struct{
 	Engine *redis.Client
 	expiration time.Duration // 过期时间
-	Coder Codec
 }
 
 var DefaultRedis = &Redis{
@@ -20,7 +21,6 @@ var DefaultRedis = &Redis{
 		DB:       DefaultRedisDB,                
 	}),
 	expiration: DefaultRedisExpiration,
-	Coder: DefaultCodec,
 }
 
 var (
@@ -47,7 +47,7 @@ func GetPattern(KeyMapValue map[string]*Value) (pattern string){
 // value转换成json编码
 func (r *Redis) Set(table string, KeyMapValue map[string]*Value, value interface{}, expiration time.Duration) error {
 	pattern := table + GetPattern(KeyMapValue)
-	valueBytes, err := r.Coder.Marshal(value)
+	valueBytes, err := json.Marshal(value)
 	if err != nil{
 		return err
 	}
@@ -62,6 +62,6 @@ func (r *Redis) Get(table string, KeyMapValue map[string]*Value, value interface
 		return err
 	}
 	valueBytes := []byte(valueString)
-	return r.Coder.Unmarshal(valueBytes, value)
+	return json.Unmarshal(valueBytes, value)
 }
 

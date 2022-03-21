@@ -33,10 +33,7 @@ type Engine struct{
 	expiration: expiration time of redis, default 0
 	coder: Codec, default nil
 */ 
-func NewEngine(RedisClient *redis.Client, XormEngine *xorm.Engine, expiration time.Duration, coder Codec)*Engine{
-	if coder == nil{
-		coder = DefaultCodec
-	}
+func NewEngine(RedisClient *redis.Client, XormEngine *xorm.Engine, expiration time.Duration)*Engine{
 	return &Engine{
 		Database: &Xorm{
 			Engine: XormEngine,
@@ -44,7 +41,6 @@ func NewEngine(RedisClient *redis.Client, XormEngine *xorm.Engine, expiration ti
 		Cache: &Redis{
 			Engine: RedisClient,
 			expiration: expiration,
-			Coder: coder,
 		},
 		TableMapKV: make(map[string]PrimaryMapQuerys),
 	}
