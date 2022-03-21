@@ -28,7 +28,7 @@ func NewDiscovery(replicas int, fn Hash) *Discovery {
 }
 
 // 输入真实机器地址
-func(d *Discovery) add(addrs ...string){
+func(d *Discovery) Add(addrs ...string){
 	for _, addr := range addrs{
 		for i:=0;i<d.replicas;i++{
 			hash := int(d.hash([]byte(strconv.Itoa(i)+addr)))
